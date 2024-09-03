@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Jost',
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 24.0,
                 ),
               ),
@@ -66,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
                             color: Colors.white,
                             fontFamily: 'Jost',
                             fontSize: 20.0,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         Container(
@@ -95,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                   Container(
-                    height: 400,
+                    height: 500,
                     width: double.infinity,
                     child: FutureBuilder<List<News>?>(
                       future: news,
@@ -121,20 +121,100 @@ class _MainScreenState extends State<MainScreen> {
                         } else {
                           return SizedBox(
                             child: ListView.builder(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                              ),
                               scrollDirection: Axis.horizontal,
                               itemCount: snapshot.data?.length ?? 0,
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/news');
+                                  },
                                   child: Container(
-                                    width: 120,
+                                    width: 300,
+                                    height: 500,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                    ),
+                                    margin: EdgeInsets.symmetric(
+                                      vertical: 24.0,
+                                    ),
                                     child: Column(
                                       children: <Widget>[
-                                        Text('${snapshot.data![index].title}'),
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                          child: Container(
+                                            height: 216,
+                                            width: 300,
+                                            child: Image.network(
+                                              'https://i.pinimg.com/236x/b2/a7/8b/b2a78b7520577fc3664213e22bffd2c3.jpg',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
                                         Container(
-                                          child: Image.network(
-                                            'https://i.pinimg.com/236x/b2/a7/8b/b2a78b7520577fc3664213e22bffd2c3.jpg',
-                                            width: 100,
+                                          color: Colors.yellow,
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 16.0,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                color: Colors.green,
+                                                height: 100,
+                                                child: Text(
+                                                  '${snapshot.data![index].title}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Jost',
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0,
+                                                ),
+                                                child: Text(
+                                                  '${snapshot.data![index].timestamp}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'Jost',
+                                                    fontSize: 12.0,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Icons.share_outlined,
+                                                      color: Colors.white,
+                                                      size: 20.0,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 16.0,
+                                                    ),
+                                                    Icon(
+                                                      Icons.more_vert,
+                                                      color: Colors.white,
+                                                      size: 24.0,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
