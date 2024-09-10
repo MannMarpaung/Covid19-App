@@ -1,7 +1,14 @@
 import 'package:api_challanges_skl/model/hoaxes.dart';
 import 'package:api_challanges_skl/model/hospitals.dart';
 import 'package:api_challanges_skl/model/news.dart';
+import 'package:api_challanges_skl/model/stats.dart';
 import 'package:api_challanges_skl/service/covid19_api.dart';
+import 'package:api_challanges_skl/ui/bottom_bar.dart';
+import 'package:api_challanges_skl/ui/hoaxes_detail_screen.dart';
+import 'package:api_challanges_skl/ui/hospitals_detail_screen.dart';
+import 'package:api_challanges_skl/ui/news_detail_screen.dart';
+import 'package:api_challanges_skl/ui/stats_detail_screen.dart';
+import 'package:api_challanges_skl/ui/view_all_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,10 +22,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   // Color.fromARGB(255, 25, 25, 25)
   // Color.fromARGB(255, 125, 125, 125)
+  // Color.fromARGB(255, 27, 32, 37)
   // Color.fromARGB(255, 0, 197, 168)
   final Future<List<News>?> news = Covid19Api().getNews();
   final Future<List<Hoaxes>?> hoaxes = Covid19Api().getHoaxes();
   final Future<List<Hospitals>?> hospitals = Covid19Api().getHospitals();
+  final Future<Stats> stats = Covid19Api().getStats();
 
   @override
   Widget build(BuildContext context) {
@@ -81,24 +90,41 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           Container(
                             width: 100.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'View All',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 197, 168),
-                                    fontFamily: 'Jost',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.all(1),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewAllScreen(
+                                      initialIndex: 0, // Untuk News
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Color.fromARGB(255, 0, 197, 168),
-                                  size: 16.0,
-                                ),
-                              ],
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    'View All',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 197, 168),
+                                      fontFamily: 'Jost',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Color.fromARGB(255, 0, 197, 168),
+                                    size: 16.0,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -126,9 +152,13 @@ class _MainScreenState extends State<MainScreen> {
                             return Center(
                               child: Text(
                                 'News not found',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
                             );
                           } else {
+                            List<News> news = snapshot.data as List<News>;
                             return SizedBox(
                               child: ListView.builder(
                                 padding: EdgeInsets.symmetric(
@@ -137,9 +167,18 @@ class _MainScreenState extends State<MainScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data?.length ?? 0,
                                 itemBuilder: (BuildContext context, int index) {
+                                  final newsItem = news[index];
                                   return InkWell(
                                     onTap: () {
-                                      Navigator.pushNamed(context, '/news');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewsDetailScreen(
+                                            newsItem: newsItem,
+                                          ),
+                                        ),
+                                      );
                                     },
                                     child: Container(
                                       width: 300,
@@ -270,24 +309,41 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           Container(
                             width: 100.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'View All',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 197, 168),
-                                    fontFamily: 'Jost',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.all(0),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewAllScreen(
+                                      initialIndex: 2, // Untuk News
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Color.fromARGB(255, 0, 197, 168),
-                                  size: 16.0,
-                                ),
-                              ],
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    'View All',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 197, 168),
+                                      fontFamily: 'Jost',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Color.fromARGB(255, 0, 197, 168),
+                                    size: 16.0,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -317,6 +373,9 @@ class _MainScreenState extends State<MainScreen> {
                             return Center(
                               child: Text(
                                 'Hospitals not found',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
                             );
                           } else {
@@ -328,7 +387,18 @@ class _MainScreenState extends State<MainScreen> {
                                     width: 120,
                                     child: Container(
                                       child: InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HospitalsDetailScreen(
+                                                hospitals:
+                                                    snapshot.data![index],
+                                              ),
+                                            ),
+                                          );
+                                        },
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -423,24 +493,41 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           Container(
                             width: 100.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'View All',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 197, 168),
-                                    fontFamily: 'Jost',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.all(0),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewAllScreen(
+                                      initialIndex: 1,
+                                    ),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Color.fromARGB(255, 0, 197, 168),
-                                  size: 16.0,
-                                ),
-                              ],
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    'View All',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 197, 168),
+                                      fontFamily: 'Jost',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Color.fromARGB(255, 0, 197, 168),
+                                    size: 16.0,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -468,9 +555,13 @@ class _MainScreenState extends State<MainScreen> {
                             return Center(
                               child: Text(
                                 'Hoaxes not found',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
                             );
                           } else {
+                            List<Hoaxes> hoaxes = snapshot.data as List<Hoaxes>;
                             return SizedBox(
                               child: ListView.builder(
                                 padding: EdgeInsets.symmetric(
@@ -479,9 +570,18 @@ class _MainScreenState extends State<MainScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data?.length ?? 0,
                                 itemBuilder: (BuildContext context, int index) {
+                                  final hoaxesItem = hoaxes[index];
                                   return InkWell(
                                     onTap: () {
-                                      Navigator.pushNamed(context, '/news');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              HoaxesDetailScreen(
+                                            hoaxesItem: hoaxesItem,
+                                          ),
+                                        ),
+                                      );
                                     },
                                     child: Container(
                                       width: 300,
@@ -591,108 +691,481 @@ class _MainScreenState extends State<MainScreen> {
                   ],
                 ),
               ),
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            'Stats',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Jost',
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Container(
+                            width: 100.0,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.all(1),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewAllScreen(
+                                      initialIndex: 3,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    'View All',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 197, 168),
+                                      fontFamily: 'Jost',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Color.fromARGB(255, 0, 197, 168),
+                                    size: 16.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 300,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 12.0,
+                      ),
+                      width: double.infinity,
+                      child: FutureBuilder(
+                        future: stats,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                'Error: ${snapshot.error}',
+                              ),
+                            );
+                          } else if (!snapshot.hasData) {
+                            return Center(
+                              child: Text(
+                                'Hoaxes not found',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          } else {
+                            Stats stats = snapshot.data!;
+                            String formatNumber(number) {
+                              final formatter = NumberFormat('#,##0', 'id_ID');
+                              return formatter.format(number);
+                            }
+
+                            return SizedBox(
+                              child: SingleChildScrollView(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                ),
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 16.0,
+                                        ),
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Color.fromARGB(255, 27, 32, 37),
+                                          borderRadius: BorderRadius.circular(
+                                            12.0,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Container(
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    width: 80,
+                                                    height: 48,
+                                                    child: Image.network(
+                                                      "https://www.worldatlas.com/r/w1200-h701-c1200x701/upload/9f/69/0a/id-flag.jpg",
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8.0,
+                                                  ),
+                                                  Text(
+                                                    '${stats.name}',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(
+                                                    'Infected :',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    formatNumber(stats
+                                                        .numbers!.infected),
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 12.0,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8.0,
+                                                  ),
+                                                  Text(
+                                                    'Recovered :',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    formatNumber(stats
+                                                        .numbers!.recovered),
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 12.0,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 8.0,
+                                                  ),
+                                                  Text(
+                                                    'Fatal :',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    formatNumber(
+                                                        stats.numbers!.fatal),
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'Jost',
+                                                      fontSize: 12.0,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Text(
+                                              DateFormat('EEE, dd MMM yyyy')
+                                                  .format(
+                                                DateTime
+                                                    .fromMillisecondsSinceEpoch(
+                                                  stats.timestamp ?? 0,
+                                                ),
+                                              ),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'Jost',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 10.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Container(
+                                        height: 300,
+                                        width: 240 *
+                                            (stats.regions!.length / 3)
+                                                .ceilToDouble(),
+                                        child: GridView.builder(
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            mainAxisExtent: 240,
+                                          ),
+                                          scrollDirection: Axis.horizontal,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: stats.regions!.length,
+                                          itemBuilder: (context, index) {
+                                            final statsItem =
+                                                stats.regions![index];
+                                            return InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        StatsDetailScreen(
+                                                      stats: statsItem,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: 12.0,
+                                                ),
+                                                margin: EdgeInsets.all(
+                                                  8.0,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Color.fromARGB(
+                                                    255,
+                                                    27,
+                                                    32,
+                                                    37,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    12.0,
+                                                  ),
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      '${stats.regions![index].name}',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: 'Jost',
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 14.0,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 8.0,
+                                                    ),
+                                                    Container(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: <Widget>[
+                                                          Container(
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  'Infected',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'Jost',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        12.0,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  formatNumber(stats
+                                                                      .regions![
+                                                                          index]
+                                                                      .numbers!
+                                                                      .infected),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'Jost',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        12.0,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  'Recovered',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'Jost',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        12.0,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  formatNumber(stats
+                                                                      .regions![
+                                                                          index]
+                                                                      .numbers!
+                                                                      .recovered),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'Jost',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        12.0,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  'Fatal',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'Jost',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        12.0,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  formatNumber(stats
+                                                                      .regions![
+                                                                          index]
+                                                                      .numbers!
+                                                                      .fatal),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        'Jost',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400,
+                                                                    fontSize:
+                                                                        12.0,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(
-          top: 8.0,
-        ),
-        height: 92,
-        color: Colors.black,
-        child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.spaceEvenly, // Rata tengah dan seimbang
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize
-                    .min, // Pastikan kolom tidak lebih tinggi dari yang diperlukan
-                children: [
-                  Icon(
-                    Icons.home_outlined,
-                    color: Color.fromARGB(255, 125, 125, 125),
-                    size: 32.0,
-                  ),
-                  Text(
-                    'Home',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 125, 125, 125),
-                      fontFamily: 'Jost',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.explore_outlined,
-                    color: Color.fromARGB(255, 0, 197, 168),
-                    size: 32.0,
-                  ),
-                  Text(
-                    'Discover',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 0, 197, 168),
-                      fontFamily: 'Jost',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.bookmark_outline_rounded,
-                    color: Color.fromARGB(255, 125, 125, 125),
-                    size: 32.0,
-                  ),
-                  Text(
-                    'Bookmark',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 125, 125, 125),
-                      fontFamily: 'Jost',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.person_outline,
-                    color: Color.fromARGB(255, 125, 125, 125),
-                    size: 32.0,
-                  ),
-                  Text(
-                    'Profile',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 125, 125, 125),
-                      fontFamily: 'Jost',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: BottomBar(),
     );
   }
 }

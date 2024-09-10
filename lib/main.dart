@@ -1,8 +1,4 @@
-import 'package:api_challanges_skl/ui/hoaxes_screen.dart';
-import 'package:api_challanges_skl/ui/hospitals_screen.dart';
 import 'package:api_challanges_skl/ui/main_screen.dart';
-import 'package:api_challanges_skl/ui/news_screen.dart';
-import 'package:api_challanges_skl/ui/stats_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -38,12 +34,6 @@ class MyApp extends StatelessWidget {
       ),
       home: MainScreen(),
       debugShowCheckedModeBanner: false,
-      routes: {
-        '/hoaxes': (context) => HoaxesScreen(),
-        '/news': (context) => NewsScreen(),
-        '/hospitals': (context) => HospitalsScreen(),
-        '/stats': (context) => StatsScreen(),
-      },
     );
   }
 }

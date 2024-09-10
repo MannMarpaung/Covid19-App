@@ -38,6 +38,7 @@ dependencies:
   http: ^1.2.2
   timestamp_to_string: ^0.0.1
   intl: ^0.18.0
+  webview_flutter: ^4.8.0
 
 dev_dependencies:
   flutter_test:

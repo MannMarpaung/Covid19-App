@@ -49,14 +49,16 @@ class Covid19Api {
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = jsonDecode(response.body);
-      return jsonResponse.map((hospitals) => Hospitals.fromJson(hospitals)).toList();
+      return jsonResponse
+          .map((hospitals) => Hospitals.fromJson(hospitals))
+          .toList();
     } else {
       print('Request gagal dengan status: ${response.statusCode}');
       return null;
     }
   }
 
-  Future<List<Stats>?> getStats() async {
+  Future<Stats> getStats() async {
     var url = Uri.parse('${covid19URL}stats');
     print(url);
 
@@ -64,11 +66,9 @@ class Covid19Api {
     print(response.body);
 
     if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = jsonDecode(response.body);
-      return jsonResponse.map((stats) => Stats.fromJson(stats)).toList();
+      return statsFromJson(response.body);
     } else {
-      print('Request gagal dengan status: ${response.statusCode}');
-      return null;
+      throw Exception('Failed to load status data');
     }
   }
 }
